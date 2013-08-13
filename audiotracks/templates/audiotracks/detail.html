@@ -19,8 +19,8 @@
   </div>
 {% if track.user == request.user %}
 <p>
-  <a class="btn btn-primary" href="{% url edit_track track.id %}">{% trans 'Edit' %}</a>
-  <a class="btn btn-danger" href="{% url confirm_delete_track track.id %}">{% trans 'Delete' %}</a>
+  <a class="btn btn-primary" href="{% url 'edit_track' track.id %}">{% trans 'Edit' %}</a>
+  <a class="btn btn-danger" href="{% url 'confirm_delete_track' track.id %}">{% trans 'Delete' %}</a>
 </p>
 {% endif %}
 </div>

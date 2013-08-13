@@ -1,15 +1,16 @@
 import sys
-sys.path.append('..')
-
 import os
-# Make a backup of DJANGO_SETTINGS_MODULE environment variable to restore later.
+
+
+# Make a backup of DJANGO_SETTINGS_MODULE environment variable to restore
+# later.
 backup = os.environ.get('DJANGO_SETTINGS_MODULE', '')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-from django.test.simple import run_tests
+from django.test.simple import DjangoTestSuiteRunner
 
 if __name__ == "__main__":
-    failures = run_tests(['audiotracks',], verbosity=2)
+    runner = DjangoTestSuiteRunner()
+    failures = runner.run_tests(['audiotracks',], verbosity=2)
     if failures:
         sys.exit(failures)
     # Reset the DJANGO_SETTINGS_MODULE to what it was before running tests.

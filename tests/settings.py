@@ -3,7 +3,12 @@ import os
 HERE_DIR = os.path.dirname(os.path.abspath(__file__))
 MEDIA_ROOT = os.path.join(HERE_DIR, "site_media")
 
-DATABASE_ENGINE = 'sqlite3'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'test.db',
+    }
+}
 ROOT_URLCONF = ''
 SITE_ID = 1
 INSTALLED_APPS = (
@@ -15,3 +20,5 @@ INSTALLED_APPS = (
 )
 
 AUDIOTRACKS_PER_PAGE = 3
+
+SECRET_KEY = 'test secret key'

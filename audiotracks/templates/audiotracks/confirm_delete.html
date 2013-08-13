@@ -7,7 +7,7 @@
   <p>
   {% blocktrans with track.title as title %}Are you sure you want to delete "{{ title }}"? This can't be undone.{% endblocktrans %}
   </p>
-  <form method="POST" action="{% url delete_track %}">
+  <form method="POST" action="{% url 'delete_track' %}">
     {% csrf_token %}
     <input type="hidden" name="track_id" value="{{ track.id }}">
     <input type="hidden" name="came_from" value="{{ came_from }}">

@@ -4,7 +4,7 @@
 {% block body %}
 {% if user.is_authenticated %}
 <form class="audiotracks-form" id="audiotracks-upload-form" 
-      method="POST" enctype="multipart/form-data" action="{% url upload_track %}">
+      method="POST" enctype="multipart/form-data" action="{% url 'upload_track' %}">
   {% csrf_token %}
   <fieldset>
     <legend>{% trans 'Upload a new track' %}</legend>

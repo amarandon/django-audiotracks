@@ -1,4 +1,4 @@
 {% load i18n %}
-  <a class="btn small btn-primary" href="{% url edit_track track.id %}">{% trans 'Edit' %}</a>
-  <a class="btn small btn-danger" href="{% url confirm_delete_track track.id %}">{% trans 'Delete' %}</a>
+  <a class="btn small btn-primary" href="{% url 'edit_track' track.id %}">{% trans 'Edit' %}</a>
+  <a class="btn small btn-danger" href="{% url 'confirm_delete_track' track.id %}">{% trans 'Delete' %}</a>
 

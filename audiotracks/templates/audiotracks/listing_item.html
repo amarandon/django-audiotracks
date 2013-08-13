@@ -4,7 +4,7 @@
     <img class="track-image" src="{{ track.image.url_48x48 }}" alt="{% trans 'Track Image' %}" />
     {% endif %}
     <div class="track-details">
-      <a href="{% url track_detail track.user.username,track.slug %}">
+      <a href="{% url 'track_detail' track.user.username track.slug %}">
         <p class="track-title">
         {% if track.artist %} {{ track.artist }} &#8211; {% endif %}{{ track.title|title }}{% if track.genre %} ({{ track.genre }}){% endif %}
         </p>
@@ -23,8 +23,8 @@
     <p class="debug-info">Player type: <span class="audio-type"></span></p>
     {% if track.user == request.user %}
     <div class="audiotracks-action">
-      <a href="{% url edit_track track.id %}">{% trans 'Edit' %}</a>
-      <a href="{% url confirm_delete_track track.id %}">{% trans 'Delete' %}</a>
+      <a href="{% url 'edit_track' track.id %}">{% trans 'Edit' %}</a>
+      <a href="{% url 'confirm_delete_track' track.id %}">{% trans 'Delete' %}</a>
     </div>
     {% endif %}
   </div>

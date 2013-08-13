@@ -3,8 +3,8 @@
 
 {% block body %}
 <h1>{% trans 'Latest Tracks' %}</h1>
-<a href="{% url tracks_feed %}">Podcast feed</a>,
-<a href="{% url m3u %}">m3u playlist</a>
+<a href="{% url 'tracks_feed' %}">Podcast feed</a>,
+<a href="{% url 'm3u' %}">m3u playlist</a>
 <ul class="audiotracks-list">
 {% for track in tracks %}
     {% include "audiotracks/listing_item.html" %}

@@ -5,5 +5,5 @@
 {% block extra_body %}{{ block.super}}
 <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}mediaelement-2.8.2/jquery-1.7.2.min.js"><\/script>')</script>
 <script src="{{ STATIC_URL }}mediaelement-2.8.2/mediaelement-and-player.min.js"></script>
-<script src="{% url player_script %}"></script>
+<script src="{% url 'player_script' %}"></script>
 {% endblock %}

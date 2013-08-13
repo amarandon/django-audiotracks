@@ -5,7 +5,7 @@
 {% if user.is_authenticated %}
 <div class="audiotracks-form">
   <form class="form-stacked" method="POST" enctype="multipart/form-data" 
-    action="{% url edit_track track.id %}">
+    action="{% url 'edit_track' track.id %}">
     {% csrf_token %}
     <fieldset>
       <legend>{% trans 'Edit track' %}</legend>
@@ -75,7 +75,7 @@
   </form>
 </div>
 <div class="audiotracks-form" id="delete-form">
-  <form action="{% url confirm_delete_track track.id %}">
+  <form action="{% url 'confirm_delete_track' track.id %}">
     <p id="delete-button">
     <button class="btn btn-danger">{% trans 'Delete this track' %}</button>
     </p>

@@ -5,8 +5,8 @@
 <h1>
   {% blocktrans %}Tracks from {{ username }}{% endblocktrans %}
 </h1>
-<a href="{% url tracks_feed username %}">Podcast feed</a>,
-<a href="{% url m3u username %}">m3u playlist</a>
+<a href="{% url 'tracks_feed' username %}">Podcast feed</a>,
+<a href="{% url 'm3u' username %}">m3u playlist</a>
 <ul class="audiotracks-list">
 {% for track in tracks %}
     {% include "audiotracks/listing_item.html" %}
