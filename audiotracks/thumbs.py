@@ -11,7 +11,7 @@ except ImportError:
     import Image
 from django.core.files.base import ContentFile
 try:
-    import cStringIO
+    from cStringIO import StringIO
 except:
     from io import StringIO  # NOQA
 
@@ -47,8 +47,8 @@ def generate_thumb(img, thumb_size, format):
         # get minimum size
         minsize = min(xsize, ysize)
         # largest square possible in the image
-        xnewsize = (xsize - minsize) / 2
-        ynewsize = (ysize - minsize) / 2
+        xnewsize = (xsize - minsize) // 2
+        ynewsize = (ysize - minsize) // 2
         # crop it
         image2 = image.crop(
             (xnewsize, ynewsize, xsize - xnewsize, ysize - ynewsize))
@@ -62,7 +62,7 @@ def generate_thumb(img, thumb_size, format):
         image2 = image
         image2.thumbnail(thumb_size, Image.ANTIALIAS)
 
-    io = cStringIO.StringIO()
+    io = StringIO()
     # PNG and GIF are the same, JPG is JPEG
     if format.upper() == 'JPG':
         format = 'JPEG'

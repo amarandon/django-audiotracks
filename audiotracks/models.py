@@ -55,12 +55,12 @@ class AbstractTrack(models.Model):
     image = ImageWithThumbsField(
         _("Image"), upload_to=get_images_upload_path, null=True,
         blank=True, sizes=((48, 48), (200, 200)))
-    title = models.CharField(_("Title"), max_length="200", null=True)
+    title = models.CharField(_("Title"), max_length=200, null=True)
     artist = models.CharField(
-        _("Artist"), max_length="200", null=True, blank=True)
+        _("Artist"), max_length=200, null=True, blank=True)
     genre = models.CharField(
-        _("Genre"), max_length="200", null=True, blank=True)
-    date = models.CharField(_("Date"), max_length="200", null=True, blank=True)
+        _("Genre"), max_length=200, null=True, blank=True)
+    date = models.CharField(_("Date"), max_length=200, null=True, blank=True)
     description = models.TextField(_("Description"), null=True, blank=True)
     slug = models.SlugField(verbose_name=_("Slug (last part of the url)"))
     _original_slug = None  # Used to detect slug change

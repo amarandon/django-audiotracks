@@ -173,11 +173,12 @@ class TestViews(TestCase):
         self.do_upload(ext='ogg')
         track = Track.objects.get(genre="Test Data")
         self.do_edit(track, slug='new-title',
-                     image=open(os.path.join(TEST_DATA_DIR, 'image.jpg')))
+                     image=open(os.path.join(TEST_DATA_DIR, 'image.jpg'),
+                                'rb'))
         track = Track.objects.get(title="New Title")
         self.assert_(track.image.url.endswith('image.jpg'),
                      "Image should have been added")
-        self.do_edit(track, slug='new-title', delete_image='1')
+        self.do_edit(track, slug='new-title', delete_image='1', image=None)
         track = Track.objects.get(title="New Title")
         self.assertFalse(track.image, "Image should have been deleted")
 
@@ -186,7 +187,7 @@ class TestViews(TestCase):
         self.do_upload(ext='ogg')
         track = Track.objects.get(genre="Test Data")
         resp = self.client.get('/music/confirm_delete/%s' % track.id)
-        assert 'Are you sure' in resp.content
+        assert 'Are you sure' in str(resp.content)
 
     def test_delete_track(self):
         "Delete track"
@@ -208,14 +209,14 @@ class TestViews(TestCase):
 
         # Get latest tracks
         resp = self.client.get('/bob/music/1')
-        assert 'Track 7' in resp.content
-        assert 'Track 5' in resp.content
-        assert 'Track 4' not in resp.content
+        assert 'Track 7' in str(resp.content)
+        assert 'Track 5' in str(resp.content)
+        assert 'Track 4' not in str(resp.content)
 
         # Get oldest tracks
         resp = self.client.get('/bob/music/3')
-        assert 'Track 1' in resp.content
-        assert 'Track 2' not in resp.content
+        assert 'Track 1' in str(resp.content)
+        assert 'Track 2' not in str(resp.content)
 
     def test_user_latest(self):
         # Create 4 tracks for each user
