@@ -11,7 +11,7 @@ import mutagen
 from audiotracks.models import Track
 
 TEST_DATA_DIR = os.path.join(dirname(dirname(abspath(__file__))),
-                             'tests', 'data')
+                             'testing', 'data')
 
 
 class TestViews(TestCase):
