@@ -12,3 +12,6 @@ django_audiotracks.egg-info
 tests/site_media
 example_project/db.sqlite3
 example_project/site_media/audiotracks
+
+# coverage data
+.coverage
