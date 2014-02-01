@@ -6,17 +6,19 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
-import mutagen
+try:
+    import mutagen
+except ImportError:
+    import mutagenx as mutagen
 
 from audiotracks.models import Track
 
-TEST_DATA_DIR = os.path.join(dirname(dirname(abspath(__file__))),
-                             'testing', 'data')
+TEST_DATA_DIR = os.path.join(dirname(abspath(__file__)), 'testing', 'data')
 
 
 class TestViews(TestCase):
 
-    urls = 'urls'
+    urls = 'audiotracks.testing.urls'
 
     def setUp(self):
         User.objects.create_user("bob", "bob@example.com", "secret")

@@ -10,7 +10,10 @@ try:
 except ImportError:
     import Image
 from django.core.files.base import ContentFile
-import cStringIO
+try:
+    import cStringIO
+except:
+    from io import StringIO  # NOQA
 
 
 def generate_thumb(img, thumb_size, format):

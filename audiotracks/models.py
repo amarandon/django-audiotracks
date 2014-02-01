@@ -7,7 +7,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from thumbs import ImageWithThumbsField
+from .thumbs import ImageWithThumbsField
 
 
 def slugify_uniquely(value, obj, slugfield="slug"):

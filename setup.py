@@ -1,5 +1,13 @@
+import sys
 from setuptools import setup
- 
+
+
+major_version = sys.version_info[0]
+if major_version == 3:
+    MUTAGEN_PACKAGE = 'mutagenx' # Py3 compatible fork of mutagen
+else:
+    MUTAGEN_PACKAGE = 'mutagen'
+
 
 setup(
     name='django-audiotracks',
@@ -12,6 +20,7 @@ setup(
     author_email='contact@alexmarandon.com',
     url='https://github.com/amarandon/django-audiotracks',
     packages=['audiotracks'],
+    test_suite='audiotracks.testing.runtests.main',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
@@ -21,9 +30,9 @@ setup(
         'Programming Language :: Python',
         'Framework :: Django',
     ],
-    install_requires = [
-        'mutagen==1.20',
-        'PIL'
+    install_requires=[
+        '%s==1.22' % MUTAGEN_PACKAGE,
+        'Pillow'
         ],
     include_package_data=True,
     zip_safe=False,

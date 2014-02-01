@@ -15,3 +15,6 @@ example_project/site_media/audiotracks
 
 # coverage data
 .coverage
+
+# tox virtual environments
+.tox
