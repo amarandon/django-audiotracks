@@ -15,8 +15,10 @@ from django.views.generic import TemplateView
 from django.contrib import messages
 from django.contrib.auth.models import User
 
-import mutagen
-from mutagen.easyid3 import EasyID3KeyError
+try:
+    import mutagen
+except ImportError:
+    import mutagenx as mutagen  # Py3
 
 from audiotracks.models import Track
 from audiotracks.forms import TrackUploadForm, TrackEditForm
@@ -116,7 +118,7 @@ def update_audiofile_metadata(track):
         for field in METADATA_FIELDS:
             try:
                 metadata[field] = getattr(track, field)
-            except EasyID3KeyError:
+            except mutagen.easyid3.EasyID3KeyError:
                 pass
         metadata.save()
 

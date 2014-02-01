@@ -9,7 +9,7 @@ from django.test.client import Client
 try:
     import mutagen
 except ImportError:
-    import mutagenx as mutagen
+    import mutagenx as mutagen  # Py3
 
 from audiotracks.models import Track
 
@@ -33,7 +33,7 @@ class TestViews(TestCase):
     def get_upload_file(self, name, ext):
         filename = name + "." + ext
         filepath = os.path.join(TEST_DATA_DIR, filename)
-        filehandle = open(filepath)
+        filehandle = open(filepath, 'rb')
         return filename, filehandle
 
     def do_upload(self, filename="audio_file", ext="ogg"):
@@ -230,15 +230,15 @@ class TestViews(TestCase):
         # Get latest tracks from bob
         self.client.login(username='bob', password='secret')
         resp = self.client.get('/bob/music/tracks/1')
-        assert 'Bob Track 4' in resp.content
-        assert 'Bob Track 2' in resp.content
-        assert 'Bob Track 1' not in resp.content
+        assert 'Bob Track 4' in str(resp.content)
+        assert 'Bob Track 2' in str(resp.content)
+        assert 'Bob Track 1' not in str(resp.content)
 
         # Get oldest tracks from alice while being logged out
         self.client.logout()
         resp = self.client.get('/alice/music/tracks/2')
-        assert 'Alice Track 1' in resp.content
-        assert 'Alice Track 2' not in resp.content
+        assert 'Alice Track 1' in str(resp.content)
+        assert 'Alice Track 2' not in str(resp.content)
 
     def test_get_track(self):
         "Get track"
