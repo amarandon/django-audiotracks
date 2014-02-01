@@ -5,11 +5,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.utils.translation  import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 from thumbs import ImageWithThumbsField
 
-def slugify_uniquely(value, obj, slugfield="slug"): 
+
+def slugify_uniquely(value, obj, slugfield="slug"):
     suffix = 1
     potential = base = slugify(value)
     filter_params = {}
@@ -28,8 +29,10 @@ def slugify_uniquely(value, obj, slugfield="slug"):
 def get_upload_path(dirname, obj, filename):
     return os.path.join("audiotracks", dirname, obj.user.username, filename)
 
+
 def get_images_upload_path(obj, filename):
     return get_upload_path("images", obj, filename)
+
 
 def get_audio_upload_path(obj, filename):
     return get_upload_path("audio_files", obj, filename)
@@ -41,22 +44,26 @@ class AbstractTrack(models.Model):
         abstract = True
 
     user = models.ForeignKey(User,
-        related_name = "tracks",
-        blank = True,
-        null = True
-    )
+                             related_name="tracks",
+                             blank=True,
+                             null=True
+                             )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    audio_file = models.FileField(_("Audio file"), upload_to=get_audio_upload_path)
-    image = ImageWithThumbsField(_("Image"), upload_to=get_images_upload_path, null=True,
-            blank=True, sizes=((48,48), (200,200)))
+    audio_file = models.FileField(
+        _("Audio file"), upload_to=get_audio_upload_path)
+    image = ImageWithThumbsField(
+        _("Image"), upload_to=get_images_upload_path, null=True,
+        blank=True, sizes=((48, 48), (200, 200)))
     title = models.CharField(_("Title"), max_length="200", null=True)
-    artist = models.CharField(_("Artist"), max_length="200", null=True, blank=True)
-    genre = models.CharField(_("Genre"), max_length="200", null=True, blank=True)
+    artist = models.CharField(
+        _("Artist"), max_length="200", null=True, blank=True)
+    genre = models.CharField(
+        _("Genre"), max_length="200", null=True, blank=True)
     date = models.CharField(_("Date"), max_length="200", null=True, blank=True)
     description = models.TextField(_("Description"), null=True, blank=True)
     slug = models.SlugField(verbose_name=_("Slug (last part of the url)"))
-    _original_slug = None # Used to detect slug change
+    _original_slug = None  # Used to detect slug change
 
     def __init__(self, *args, **kwargs):
         super(AbstractTrack, self).__init__(*args, **kwargs)
@@ -69,7 +76,7 @@ class AbstractTrack(models.Model):
         if not self.slug:
             # Automatically set initial slug
             slug_source = getattr(self, 'title') or \
-                    os.path.splitext(os.path.basename(self.audio_file.name))[0]
+                os.path.splitext(os.path.basename(self.audio_file.name))[0]
             self.slug = slugify_uniquely(slug_source, self)
         super(AbstractTrack, self).save(**kwargs)
 
@@ -90,7 +97,8 @@ class AbstractTrack(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('audiotracks.views.track_detail', [self.user.username, self.slug])
+        return ('audiotracks.views.track_detail',
+                [self.user.username, self.slug])
 
 if hasattr(settings, 'AUDIOTRACKS_MODEL'):
     app_name, model_name = settings.AUDIOTRACKS_MODEL.split('.')

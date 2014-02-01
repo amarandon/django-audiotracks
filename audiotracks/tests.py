@@ -22,7 +22,7 @@ class TestViews(TestCase):
         User.objects.create_user("bob", "bob@example.com", "secret")
         User.objects.create_user("alice", "alice@example.com", "secret")
         self.client = Client()
-        response = self.client.login(username='bob', password='secret')
+        self.client.login(username='bob', password='secret')
 
     def tearDown(self):
         if os.path.exists(settings.MEDIA_ROOT):
@@ -39,16 +39,18 @@ class TestViews(TestCase):
         resp = self.client.post('/music/upload', {
             'name': filename,
             'audio_file': filehandle
-            }, follow=True)
+        }, follow=True)
         return resp
 
     def do_upload_as_user(self, username, ext='ogg'):
-        response = self.client.logout()
-        response = self.client.login(username=username, password='secret')
+        self.client.logout()
+        self.client.login(username=username, password='secret')
         self.do_upload(ext=ext)
-        self.assert_(os.path.exists(os.path.join(settings.MEDIA_ROOT,
-            "audiotracks", "audio_files", username, "audio_file.%s" % ext)),
-            "Upload path should contain username")
+        upload_path = os.path.join(settings.MEDIA_ROOT, "audiotracks",
+                                   "audio_files", username,
+                                   "audio_file.%s" % ext)
+        self.assert_(os.path.exists(upload_path),
+                     "Upload path should contain username")
 
     def verify_upload(self):
         track = Track.objects.get(genre="Test Data")
@@ -60,10 +62,10 @@ class TestViews(TestCase):
         default_params = {
             'title': 'New Title',
             'genre': 'New Genre',
-            }
+        }
         default_params.update(params)
         return self.client.post('/music/edit/%s' % track.id,
-                default_params)
+                                default_params)
 
     def test_upload_ogg(self):
         "OGG file upload"
@@ -107,7 +109,7 @@ class TestViews(TestCase):
         # WAV file metadata not currently supported
         track = Track.objects.get(id=1)
         self.assertEquals(track.slug,
-            "steinregen-dubsystem-ls-zongosound-outernational-f")
+                          "steinregen-dubsystem-ls-zongosound-outernational-f")
 
     def test_edit_track_attributes(self, ext='ogg'):
         """
@@ -119,8 +121,9 @@ class TestViews(TestCase):
         self.do_edit(track, slug='new-title')
         track = Track.objects.get(genre="New Genre")
         self.assertEquals(track.title, 'New Title')
-        audio_file_path = os.path.join(settings.MEDIA_ROOT,
-            "audiotracks", "audio_files", "bob", "audio_file.%s" % ext)
+        audio_file_path = os.path.join(settings.MEDIA_ROOT, "audiotracks",
+                                       "audio_files", "bob",
+                                       "audio_file.%s" % ext)
         metadata = mutagen.File(audio_file_path, easy=True)
         self.assertEquals(metadata['title'], ['New Title'])
         self.assertEquals(metadata['genre'], ['New Genre'])
@@ -151,13 +154,13 @@ class TestViews(TestCase):
         # Update track with ogg file
         track_id = Track.objects.get(genre="Test Data").id
         filename, filehandle = self.get_upload_file('audio_file', 'ogg')
-        resp = self.client.post('/music/edit/%s' % track_id, {
+        self.client.post('/music/edit/%s' % track_id, {
             'name': filename,
             'audio_file': filehandle,
             'title': "New Title",
             'genre': "New Genre",
             'slug': "new-slug",
-            })
+        })
 
         # Check that the file has been replaced
         track = Track.objects.get(id=track_id)
@@ -168,10 +171,10 @@ class TestViews(TestCase):
         self.do_upload(ext='ogg')
         track = Track.objects.get(genre="Test Data")
         self.do_edit(track, slug='new-title',
-            image=open(os.path.join(TEST_DATA_DIR, 'image.jpg')))
+                     image=open(os.path.join(TEST_DATA_DIR, 'image.jpg')))
         track = Track.objects.get(title="New Title")
         self.assert_(track.image.url.endswith('image.jpg'),
-                "Image should have been added")
+                     "Image should have been added")
         self.do_edit(track, slug='new-title', delete_image='1')
         track = Track.objects.get(title="New Title")
         self.assertFalse(track.image, "Image should have been deleted")
@@ -187,8 +190,10 @@ class TestViews(TestCase):
         "Delete track"
         self.do_upload(ext='ogg')
         track = Track.objects.get(genre="Test Data")
-        resp = self.client.post('/music/delete', {'track_id': track.id,
-            'came_from': '/somewhere'})
+        self.client.post('/music/delete', {
+            'track_id': track.id,
+            'came_from': '/somewhere'
+        })
         self.assertEquals(Track.objects.count(), 0)
 
     def test_latest(self):
@@ -252,8 +257,8 @@ class TestViews(TestCase):
         self.do_upload_as_user('alice')
         bob_track, alice_track = Track.objects.all()
         self.assertEquals(bob_track.slug, alice_track.slug,
-                "We should be able to create 2 tracks as 2 different users "
-                "with the same slug.")
+                          "We should be able to create 2 tracks as 2 "
+                          "different users with the same slug.")
 
         # We should be allowed to set the same slug for 2 tracks belonging to 2
         # different users
@@ -279,14 +284,19 @@ class TestViews(TestCase):
 
         response = self.client.get('/bob/music/m3u')
         self.assertTrue("playlist-bob.m3u" in response['Content-Disposition'])
-        self.assertContains(response,
-                "http://testserver/audiotracks/audio_files/bob/audio_file.ogg")
-        self.assertNotContains(response,
-                "http://testserver/audiotracks/audio_files/alice/audio_file.flac")
+        self.assertContains(
+            response,
+            "http://testserver/audiotracks/audio_files/bob/audio_file.ogg")
+        self.assertNotContains(
+            response,
+            "http://testserver/audiotracks/audio_files/alice/audio_file.flac")
 
         response = self.client.get('/music/m3u')
-        self.assertTrue("playlist-testserver.m3u" in response['Content-Disposition'])
-        self.assertContains(response,
-                "http://testserver/audiotracks/audio_files/bob/audio_file.ogg")
-        self.assertContains(response,
-                "http://testserver/audiotracks/audio_files/alice/audio_file.flac")
+        self.assertTrue(
+            "playlist-testserver.m3u" in response['Content-Disposition'])
+        self.assertContains(
+            response,
+            "http://testserver/audiotracks/audio_files/bob/audio_file.ogg")
+        self.assertContains(
+            response,
+            "http://testserver/audiotracks/audio_files/alice/audio_file.flac")

@@ -1,6 +1,6 @@
 import os
 
-from django.utils.translation  import ugettext
+from django.utils.translation import ugettext
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import RequestSite
 from django.conf import settings
@@ -49,12 +49,13 @@ def index(request, username=None, page_number=None):
         tracks = tracks.filter(user__username=username)
     tracks = tracks.order_by('-created_at').all()
     page, tracks = paginate(tracks, page_number)
-    base_path = urlresolvers.reverse('audiotracks',
-                    args=[username] if username is not None else [])
+    base_path = urlresolvers.reverse(
+        'audiotracks',
+        args=[username] if username is not None else [])
     return render_to_response("audiotracks/latest.html", {
         'username': username, 'tracks': tracks, 'page': page,
         'base_path': base_path,
-        }, context_instance=RequestContext(request))
+    }, context_instance=RequestContext(request))
 
 
 def user_index(request, username, page_number=None):
@@ -65,7 +66,7 @@ def user_index(request, username, page_number=None):
     return render_to_response("audiotracks/user_index.html", {
         'username': username, 'tracks': tracks, 'page': page,
         'base_path': base_path,
-        }, context_instance=RequestContext(request))
+    }, context_instance=RequestContext(request))
 
 
 def track_detail(request, track_slug, username=None):
@@ -73,8 +74,8 @@ def track_detail(request, track_slug, username=None):
     params['user__username'] = username
     track = Track.objects.get(**params)
     return render_to_response("audiotracks/detail.html",
-            {'username': username, 'track': track},
-            context_instance=RequestContext(request))
+                              {'username': username, 'track': track},
+                              context_instance=RequestContext(request))
 
 
 def set_temporary_file_upload_handler(request):
@@ -101,11 +102,11 @@ def upload_track(request):
             track.save()
 
             return HttpResponseRedirect(urlresolvers.reverse('edit_track',
-                args=[track.id]))
+                                                             args=[track.id]))
     else:
         form = TrackUploadForm()
     return render_to_response("audiotracks/new.html", {'form': form},
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def update_audiofile_metadata(track):
@@ -133,7 +134,7 @@ def edit_track(request, track_id):
                 track.image = None
                 track.save()
             messages.add_message(request, messages.INFO,
-                    ugettext('Your changes have been saved.'))
+                                 ugettext('Your changes have been saved.'))
             redirect_url = urlresolvers.reverse('user_index', args=[username])
             return HttpResponseRedirect(redirect_url)
     else:
@@ -141,7 +142,7 @@ def edit_track(request, track_id):
     track_url_args = ['']
     track_url_args.insert(0, username)
     track_detail_url = urlresolvers.reverse('track_detail',
-            args=track_url_args)
+                                            args=track_url_args)
     track_url_prefix = request.build_absolute_uri(track_detail_url)
     track_filename = os.path.basename(track.audio_file.name)
     return render_to_response("audiotracks/edit.html", {
@@ -149,18 +150,18 @@ def edit_track(request, track_id):
         'track': track,
         'track_url_prefix': track_url_prefix,
         'track_filename': track_filename,
-        }, context_instance=RequestContext(request))
+    }, context_instance=RequestContext(request))
 
 
 @login_required
 def confirm_delete_track(request, track_id):
     track = get_object_or_404(request.user.tracks, id=track_id)
     default_origin_url = urlresolvers.reverse('user_index',
-            args=[request.user.username])
-    return render_to_response("audiotracks/confirm_delete.html",
-            {'track': track,
-             'came_from': request.GET.get('came_from', default_origin_url)},
-            context_instance=RequestContext(request))
+                                              args=[request.user.username])
+    return render_to_response("audiotracks/confirm_delete.html", {
+        'track': track,
+        'came_from': request.GET.get('came_from', default_origin_url)
+    }, context_instance=RequestContext(request))
 
 
 @login_required
@@ -169,7 +170,7 @@ def delete_track(request):
     track = get_object_or_404(request.user.tracks, id=track_id)
     track.delete()
     messages.add_message(request, messages.INFO,
-            ugettext('"%s" has been deleted.') % track.title)
+                         ugettext('"%s" has been deleted.') % track.title)
     return HttpResponseRedirect(request.POST.get('came_from', '/'))
 
 
@@ -177,7 +178,8 @@ class JavaScriptView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
         response_kwargs['content_type'] = "application/javascript"
-        return super(JavaScriptView, self).render_to_response(context, **response_kwargs)
+        return super(JavaScriptView, self).render_to_response(
+            context, **response_kwargs)
 
 player_script = JavaScriptView.as_view(template_name="audiotracks/player.js")
 
@@ -189,7 +191,8 @@ def m3u(request, username=None):
     tracks = tracks.order_by('-created_at').all()
     response = HttpResponse(content_type="audio/x-mpequrl")
     site = RequestSite(request)
-    filename = "playlist-%s.m3u" % (site.name if username is None else username)
+    filename = "playlist-%s.m3u" % (site.name if username is None
+                                    else username)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     for track in tracks:
         url = 'http://%s/%s' % (site.domain, track.audio_file.url.strip("/"))

@@ -2,6 +2,7 @@ from django import forms
 
 from audiotracks.models import Track
 
+
 class TrackUploadForm(forms.ModelForm):
     class Meta:
         model = Track
@@ -24,4 +25,3 @@ class TrackEditForm(forms.ModelForm):
                 raise forms.ValidationError("This URL is already taken.")
 
         return new_slug
-

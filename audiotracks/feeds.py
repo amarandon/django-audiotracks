@@ -16,6 +16,7 @@ ITEMS_PER_FEED = getattr(settings, 'AUDIOTRACKS_PODCAST_LIMIT', 10)
 
 
 class AllTracks(Feed):
+
     def link(self):
         return self.request.build_absolute_uri("/")
 
@@ -33,17 +34,17 @@ class AllTracks(Feed):
 
     def item_title(self, item):
         return _('"%(title)s" posted by %(username)s') % {
-                'title': item.title,
-                'username': item.user.username
-                }
+            'title': item.title,
+            'username': item.user.username
+        }
 
     def item_description(self, item):
         if item.image:
             return '<img src="%s" alt="%s"/><p>%s</p>' % (
-                    self.request.build_absolute_uri(item.image.url_200x200),
-                    _('Image for "%s"') % item.title,
-                    item.description
-                    )
+                self.request.build_absolute_uri(item.image.url_200x200),
+                _('Image for "%s"') % item.title,
+                item.description
+            )
         else:
             return item.description
 
@@ -74,18 +75,19 @@ class UserTracks(AllTracks):
 
     def title(self, user):
         return _("Podcast by %(username)s on %(site_name)s") % {
-                'username': user.username, 
-                'site_name': self._get_site_name()
+            'username': user.username,
+            'site_name': self._get_site_name()
         }
 
     def description(self, user):
         return _("Audio tracks posted on %(site_name)s by %(username)s" % {
             'site_name': self._get_site_name(),
             'username': user.username
-            })
+        })
 
     def items(self, user):
-        return Track.objects.filter(user=user).order_by("-created_at")[:ITEMS_PER_FEED]
+        query = Track.objects.filter(user=user).order_by("-created_at")
+        return query[:ITEMS_PER_FEED]
 
 
 all_tracks = AllTracks()
@@ -94,8 +96,8 @@ user_tracks = UserTracks()
 
 def choose_feed(request, *args, **kwargs):
     """
-    Pick up the user feed or the global feed depending on whether or not the URL
-    contains a username parameter
+    Pick up the user feed or the global feed depending on whether or not the
+    URL contains a username parameter
     """
     feed = user_tracks if 'username' in kwargs else all_tracks
     return feed.__call__(request, *args, **kwargs)
