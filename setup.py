@@ -4,14 +4,14 @@ from setuptools import setup
 
 major_version = sys.version_info[0]
 if major_version == 3:
-    MUTAGEN_PACKAGE = 'mutagenx' # Py3 compatible fork of mutagen
+    MUTAGEN_PACKAGE = 'mutagenx'  # Py3 compatible fork of mutagen
 else:
     MUTAGEN_PACKAGE = 'mutagen'
 
 
 setup(
     name='django-audiotracks',
-    version='0.2.2',
+    version='0.2.3',
     description='A pluggable Django app to publish audio tracks',
     long_description=open("README.rst").read(),
     keywords='django audio sound',
@@ -28,6 +28,8 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.3",
         'Framework :: Django',
     ],
     install_requires=[

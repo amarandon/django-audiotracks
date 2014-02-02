@@ -1,6 +1,12 @@
 Changes
 ~~~~~~~
 
+v0.2.3 (2014-02-02)
+___________________ 
+
+- Add tox and travis config files
+- Add Python 3 support
+
 
 v0.2.2 (2013-04-08)
 ___________________ 
