@@ -1,0 +1,20 @@
+language: python
+env:
+  - DJANGO_VERSION=1.6.1
+python:
+  - "2.7"
+  - "3.3"
+# command to install dependencies
+install:
+  - pip install Django==$DJANGO_VERSION
+  - pip install -r dev_requirements.txt
+
+before_script:
+  - make lint
+
+script:
+  - make coverage
+
+after_success:
+ - pip install coveralls
+ - coveralls

@@ -1,8 +1,8 @@
 test: lint
-	python testing/runtests.py
+	tox
 
 coverage:
-	coverage run --source=audiotracks testing/runtests.py
+	coverage run --source=audiotracks setup.py test
 	coverage report
 
 lint:

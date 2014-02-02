@@ -10,7 +10,10 @@ try:
 except ImportError:
     import Image
 from django.core.files.base import ContentFile
-import cStringIO
+try:
+    from cStringIO import StringIO as IOBuffer
+except:
+    from io import BytesIO as IOBuffer  # NOQA
 
 
 def generate_thumb(img, thumb_size, format):
@@ -44,8 +47,8 @@ def generate_thumb(img, thumb_size, format):
         # get minimum size
         minsize = min(xsize, ysize)
         # largest square possible in the image
-        xnewsize = (xsize - minsize) / 2
-        ynewsize = (ysize - minsize) / 2
+        xnewsize = (xsize - minsize) // 2
+        ynewsize = (ysize - minsize) // 2
         # crop it
         image2 = image.crop(
             (xnewsize, ynewsize, xsize - xnewsize, ysize - ynewsize))
@@ -59,7 +62,7 @@ def generate_thumb(img, thumb_size, format):
         image2 = image
         image2.thumbnail(thumb_size, Image.ANTIALIAS)
 
-    io = cStringIO.StringIO()
+    io = IOBuffer()
     # PNG and GIF are the same, JPG is JPEG
     if format.upper() == 'JPG':
         format = 'JPEG'
