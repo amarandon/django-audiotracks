@@ -11,9 +11,9 @@ except ImportError:
     import Image
 from django.core.files.base import ContentFile
 try:
-    from cStringIO import StringIO
+    from cStringIO import StringIO as IOBuffer
 except:
-    from io import StringIO  # NOQA
+    from io import BytesIO as IOBuffer  # NOQA
 
 
 def generate_thumb(img, thumb_size, format):
@@ -62,7 +62,7 @@ def generate_thumb(img, thumb_size, format):
         image2 = image
         image2.thumbnail(thumb_size, Image.ANTIALIAS)
 
-    io = StringIO()
+    io = IOBuffer()
     # PNG and GIF are the same, JPG is JPEG
     if format.upper() == 'JPG':
         format = 'JPEG'
