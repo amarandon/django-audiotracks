@@ -251,6 +251,10 @@ class TestViews(TestCase):
         self.assertEquals(bob_track.slug, alice_track.slug)
         self.client.get('/bob/music/track/' + bob_track.slug)
 
+    def test_missing_track(self):
+        response = self.client.get('/bob/music/track/non-existing')
+        self.assertEqual(response.status_code, 404)
+
     def test_prevent_duplicate_slug(self):
         "Prevent duplicate slug for the same user"
         # Upload a track

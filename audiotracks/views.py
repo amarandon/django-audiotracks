@@ -74,7 +74,7 @@ def user_index(request, username, page_number=None):
 def track_detail(request, track_slug, username=None):
     params = {'slug': track_slug}
     params['user__username'] = username
-    track = Track.objects.get(**params)
+    track = get_object_or_404(Track, **params)
     return render_to_response("audiotracks/detail.html",
                               {'username': username, 'track': track},
                               context_instance=RequestContext(request))
