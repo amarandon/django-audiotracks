@@ -118,3 +118,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 LOGIN_REDIRECT_URL = "/"
 
 AUDIOTRACKS_PER_PAGE = 5
+
+TEST_RUNNER = "django.test.simple.DjangoTestSuiteRunner"

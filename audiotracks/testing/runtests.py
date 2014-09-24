@@ -19,6 +19,11 @@ def main():
         },
         ROOT_URLCONF='audiotracks.testing.urls',
         SITE_ID=1,
+        MIDDLEWARE_CLASSES=(
+            "django.contrib.sessions.middleware.SessionMiddleware",
+            "django.contrib.auth.middleware.AuthenticationMiddleware",
+            "django.contrib.messages.middleware.MessageMiddleware",
+        ),
         INSTALLED_APPS=(
             "django.contrib.auth",
             "django.contrib.contenttypes",
@@ -29,6 +34,11 @@ def main():
         AUDIOTRACKS_PER_PAGE=3,
         SECRET_KEY = 'test secret key'
     )
+    try:
+        from django import setup
+        setup()
+    except ImportError:
+        pass
     from django.test.utils import get_runner
     runner = get_runner(settings)(verbosity=1, interactive=True)
     failures = runner.run_tests(['audiotracks'])

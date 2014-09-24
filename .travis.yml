@@ -1,9 +1,11 @@
 language: python
 env:
   - DJANGO_VERSION=1.6.1
+  - DJANGO_VERSION=1.7
 python:
   - "2.7"
   - "3.3"
+  - "3.4"
 # command to install dependencies
 install:
   - pip install Django==$DJANGO_VERSION
