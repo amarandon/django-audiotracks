@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ImproperlyConfigured
+from django.apps import apps as django_apps
 
 from .thumbs import ImageWithThumbsField
 
@@ -100,9 +102,28 @@ class AbstractTrack(models.Model):
         return ('audiotracks.views.track_detail',
                 [self.user.username, self.slug])
 
-if hasattr(settings, 'AUDIOTRACKS_MODEL'):
-    app_name, model_name = settings.AUDIOTRACKS_MODEL.split('.')
-    Track = models.get_model(app_name, model_name)
-else:
-    class Track(AbstractTrack):
-        pass
+
+class Track(AbstractTrack):
+
+    class Meta(AbstractTrack.Meta):
+        swappable = 'AUDIOTRACKS_MODEL'
+
+
+def get_track_model():
+    if not hasattr(get_track_model, 'result'):
+        if hasattr(settings, 'AUDIOTRACKS_MODEL'):
+            try:
+                get_track_model.result = django_apps.get_model(
+                    settings.AUDIOTRACKS_MODEL)
+            except ValueError:
+                raise ImproperlyConfigured(
+                    "AUDIOTRACKS_MODEL must be of the form " +
+                    "'app_label.model_name'")
+            except LookupError:
+                raise ImproperlyConfigured(
+                    "AUDIOTRACKS_MODEL refers to model " +
+                    "'%s' that has not been installed" %
+                    settings.AUTH_USER_MODEL)
+        else:
+            get_track_model.result = Track
+    return get_track_model.result

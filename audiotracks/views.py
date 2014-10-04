@@ -20,7 +20,7 @@ try:
 except ImportError:
     import mutagenx as mutagen  # Py3
 
-from audiotracks.models import Track
+from audiotracks.models import get_track_model
 from audiotracks.forms import TrackUploadForm, TrackEditForm
 
 METADATA_FIELDS = ('title', 'artist', 'genre', 'description', 'date')
@@ -46,7 +46,7 @@ def paginate(tracks, page_number):
 
 
 def index(request, username=None, page_number=None):
-    tracks = Track.objects
+    tracks = get_track_model().objects
     if username:
         tracks = tracks.filter(user__username=username)
     tracks = tracks.order_by('-created_at').all()
@@ -74,7 +74,7 @@ def user_index(request, username, page_number=None):
 def track_detail(request, track_slug, username=None):
     params = {'slug': track_slug}
     params['user__username'] = username
-    track = get_object_or_404(Track, **params)
+    track = get_object_or_404(get_track_model(), **params)
     return render_to_response("audiotracks/detail.html",
                               {'username': username, 'track': track},
                               context_instance=RequestContext(request))
@@ -187,7 +187,7 @@ player_script = JavaScriptView.as_view(template_name="audiotracks/player.js")
 
 
 def m3u(request, username=None):
-    tracks = Track.objects
+    tracks = get_track_model().objects
     if username:
         tracks = tracks.filter(user__username=username)
     tracks = tracks.order_by('-created_at').all()

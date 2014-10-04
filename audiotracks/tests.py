@@ -11,7 +11,8 @@ try:
 except ImportError:
     import mutagenx as mutagen  # Py3
 
-from audiotracks.models import Track
+from audiotracks.models import get_track_model
+Track = get_track_model()
 
 TEST_DATA_DIR = os.path.join(dirname(abspath(__file__)), 'testing', 'data')
 
