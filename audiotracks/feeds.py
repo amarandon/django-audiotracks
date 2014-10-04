@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
 
 from audiotracks.models import get_track_model
+Track = get_track_model()
 
 ITEMS_PER_FEED = getattr(settings, 'AUDIOTRACKS_PODCAST_LIMIT', 10)
 
@@ -30,7 +31,7 @@ class AllTracks(Feed):
         self.request = request
 
     def items(self, user):
-        return get_track_model().objects.order_by('-created_at')[:ITEMS_PER_FEED]
+        return Track.objects.order_by('-created_at')[:ITEMS_PER_FEED]
 
     def item_title(self, item):
         return _('"%(title)s" posted by %(username)s') % {
@@ -86,7 +87,7 @@ class UserTracks(AllTracks):
         })
 
     def items(self, user):
-        query = get_track_model().objects.filter(user=user).order_by("-created_at")
+        query = Track.objects.filter(user=user).order_by("-created_at")
         return query[:ITEMS_PER_FEED]
 
 
