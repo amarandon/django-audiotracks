@@ -1,12 +1,4 @@
-import sys
 from setuptools import setup
-
-
-major_version = sys.version_info[0]
-if major_version == 3:
-    MUTAGEN_PACKAGE = 'mutagenx'  # Py3 compatible fork of mutagen
-else:
-    MUTAGEN_PACKAGE = 'mutagen'
 
 
 setup(
@@ -33,7 +25,7 @@ setup(
         'Framework :: Django',
     ],
     install_requires=[
-        '%s==1.22' % MUTAGEN_PACKAGE,
+        'mutagen',
         'Pillow'
         ],
     include_package_data=True,
