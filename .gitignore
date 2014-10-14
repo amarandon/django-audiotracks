@@ -18,3 +18,7 @@ example_project/site_media/audiotracks
 
 # tox virtual environments
 .tox
+
+
+# build files
+dist

@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='django-audiotracks',
-    version='0.2.4',
+    version='0.2.5',
     description='A pluggable Django app to publish audio tracks',
     long_description=open("README.rst").read(),
     keywords='django audio sound',
