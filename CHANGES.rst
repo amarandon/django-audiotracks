@@ -1,6 +1,12 @@
 Changes
 ~~~~~~~
 
+v0.2.4 (unreleased)
+___________________ 
+
+- add "js-" prefix to classes used by JavaScript code
+
+
 v0.2.4 (2014-10-14)
 ___________________ 
 

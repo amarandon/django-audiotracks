@@ -1,7 +1,8 @@
 $(document).ready(function() {
+  "use strict";
 
   function playNext(domObj) {
-    var next_audio_elem = $(domObj).parents('.audiotracks-list-entry')
+    var next_audio_elem = $(domObj).parents('.js-audiotracks-container')
                                    .next().find('audio').get(0);
     if (next_audio_elem) {
       var player = next_audio_elem.player;
@@ -21,8 +22,8 @@ $(document).ready(function() {
   }
 
   function setPlayingTitle(domObj) {
-    var parents = $(domObj).parents('.audiotracks-list-entry,.audiotracks-details'),
-        title = parents.find('.track-title').text();
+    var parents = $(domObj).parents('.js-audiotracks-container'),
+        title = parents.find('.js-audiotracks-title').text();
     $('title').html('&#9654; ' + title);
   }
 
@@ -47,7 +48,7 @@ $(document).ready(function() {
       $(me).bind('ended', function() { playNext(domObj); });
 
       var firstPlayer = mejs.players[0];
-      if (me === firstPlayer.media && location.search.indexOf('autoplay=true') != -1) {
+      if (me === firstPlayer.media && location.search.indexOf('autoplay=true') !== -1) {
         firstPlayer.play();
       }
     }

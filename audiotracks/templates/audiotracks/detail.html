@@ -2,8 +2,10 @@
 {% load i18n %}
 
 {% block body %}
-<div class="audiotracks-detail">
+<div class="audiotracks-detail js-audiotracks-container">
+  {% if track.image %}
   <img src="{{ track.image.url_200x200 }}" />
+  {% endif %}
   {% include "audiotracks/listing_item.html" %}
   {% if track.description %}
   <div class="audiotracks-description">
