@@ -21,8 +21,8 @@ $(document).ready(function() {
   }
 
   function setPlayingTitle(domObj) {
-    var title = $(domObj).parents('.audiotracks-list-entry')
-                         .find('.track-title').text();
+    var parents = $(domObj).parents('.audiotracks-list-entry,.audiotracks-details'),
+        title = parents.find('.track-title').text();
     $('title').html('&#9654; ' + title);
   }
 
