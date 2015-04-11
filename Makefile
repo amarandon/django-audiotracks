@@ -3,7 +3,7 @@ test: lint
 
 coverage:
 	coverage run --source=audiotracks setup.py test
-	coverage report
+	coverage report -m
 
 lint:
 	flake8 audiotracks

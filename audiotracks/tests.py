@@ -308,3 +308,23 @@ class TestViews(TestCase):
         self.assertContains(
             response,
             "http://testserver/audiotracks/audio_files/alice/audio_file.flac")
+
+    def test_global_feed(self):
+        self.do_upload(ext='mp3')
+        track = Track.objects.get(genre="Test Data")
+        self.do_edit(track, title='The Title', slug='new-title',
+                     image=open(os.path.join(TEST_DATA_DIR, 'image.jpg'),
+                                'rb'))
+        response = self.client.get('/music/feed')
+        self.assertContains(response, '"http://www.w3.org/2005/Atom"')
+        self.assertContains(response, 'audio_file.mp3')
+        self.assertContains(response, 'The Title')
+
+    def test_user_feed(self):
+        self.client.login(username='bob', password='secret')
+        self.do_upload(ext='ogg')
+        self.client.login(username='alice', password='secret')
+        self.do_upload(ext='mp3')
+        response = self.client.get('/alice/music/feed')
+        self.assertContains(response, 'mp3')
+        self.assertNotContains(response, 'ogg')
