@@ -2,7 +2,7 @@ import os
 
 from django.utils.translation import ugettext
 from django.contrib.auth.decorators import login_required
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.requests import RequestSite
 from django.conf import settings
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
