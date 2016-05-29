@@ -32,7 +32,7 @@ def main():
             "audiotracks",
         ),
         AUDIOTRACKS_PER_PAGE=3,
-        SECRET_KEY = 'test secret key'
+        SECRET_KEY='test secret key'
     )
     try:
         from django import setup
