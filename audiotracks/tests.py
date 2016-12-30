@@ -4,7 +4,7 @@ import shutil
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.test.client import Client
 try:
     import mutagen
@@ -17,9 +17,8 @@ Track = get_track_model()
 TEST_DATA_DIR = os.path.join(dirname(abspath(__file__)), 'testing', 'data')
 
 
+@override_settings(ROOT_URLCONF='audiotracks.testing.urls')
 class TestViews(TestCase):
-
-    urls = 'audiotracks.testing.urls'
 
     def setUp(self):
         User.objects.create_user("bob", "bob@example.com", "secret")

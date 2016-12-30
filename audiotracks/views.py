@@ -8,8 +8,7 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import urlresolvers
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.contrib import messages
@@ -54,10 +53,10 @@ def index(request, username=None, page_number=None):
     base_path = urlresolvers.reverse(
         'audiotracks',
         args=[username] if username is not None else [])
-    return render_to_response("audiotracks/latest.html", {
+    return render(request, "audiotracks/latest.html", {
         'username': username, 'tracks': tracks, 'page': page,
         'base_path': base_path,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def user_index(request, username, page_number=None):
@@ -65,19 +64,19 @@ def user_index(request, username, page_number=None):
     tracks = user.tracks.order_by('-created_at').all()
     page, tracks = paginate(tracks, page_number)
     base_path = urlresolvers.reverse('user_index', args=[username])
-    return render_to_response("audiotracks/user_index.html", {
+    return render(request, "audiotracks/user_index.html", {
         'username': username, 'tracks': tracks, 'page': page,
         'base_path': base_path,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def track_detail(request, track_slug, username=None):
     params = {'slug': track_slug}
     params['user__username'] = username
     track = get_object_or_404(get_track_model(), **params)
-    return render_to_response("audiotracks/detail.html",
-                              {'username': username, 'track': track},
-                              context_instance=RequestContext(request))
+    return render(request, "audiotracks/detail.html", {
+        'username': username, 'track': track
+    })
 
 
 def set_temporary_file_upload_handler(request):
@@ -107,8 +106,7 @@ def upload_track(request):
                                                              args=[track.id]))
     else:
         form = TrackUploadForm()
-    return render_to_response("audiotracks/new.html", {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, "audiotracks/new.html", {'form': form})
 
 
 def update_audiofile_metadata(track):
@@ -147,12 +145,12 @@ def edit_track(request, track_id):
                                             args=track_url_args)
     track_url_prefix = request.build_absolute_uri(track_detail_url)
     track_filename = os.path.basename(track.audio_file.name)
-    return render_to_response("audiotracks/edit.html", {
+    return render(request, "audiotracks/edit.html", {
         'form': form,
         'track': track,
         'track_url_prefix': track_url_prefix,
         'track_filename': track_filename,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -160,10 +158,10 @@ def confirm_delete_track(request, track_id):
     track = get_object_or_404(request.user.tracks, id=track_id)
     default_origin_url = urlresolvers.reverse('user_index',
                                               args=[request.user.username])
-    return render_to_response("audiotracks/confirm_delete.html", {
+    return render(request, "audiotracks/confirm_delete.html", {
         'track': track,
         'came_from': request.GET.get('came_from', default_origin_url)
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required

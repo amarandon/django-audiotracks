@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 
 HERE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(HERE_DIR)
 MEDIA_ROOT = os.path.join(HERE_DIR, "site_media")
 
 
@@ -32,7 +33,26 @@ def main():
             "audiotracks",
         ),
         AUDIOTRACKS_PER_PAGE=3,
-        SECRET_KEY='test secret key'
+        SECRET_KEY='test secret key',
+        TEMPLATES=[
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                "DIRS": [
+                    os.path.join(PROJECT_DIR, 'templates'),
+                ],
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    "context_processors": [
+                        "django.contrib.auth.context_processors.auth",
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.i18n",
+                        "django.template.context_processors.media",
+                        "django.template.context_processors.static",
+                        "django.contrib.messages.context_processors.messages",
+                    ]
+                }
+            }
+        ]
     )
     try:
         from django import setup

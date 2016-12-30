@@ -103,8 +103,7 @@ class AbstractTrack(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('audiotracks.views.track_detail',
-                [self.user.username, self.slug])
+        return ('track_detail', [self.user.username, self.slug])
 
 
 class Track(AbstractTrack):

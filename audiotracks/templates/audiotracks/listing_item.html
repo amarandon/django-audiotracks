@@ -4,7 +4,7 @@
     <img class="track-image" src="{{ track.image.url_48x48 }}" alt="{% trans 'Track Image' %}" />
     {% endif %}
     <div class="track-details">
-      <a href="{% url 'track_detail' track.user.username track.slug %}">
+      <a href="{% url 'track_detail' username=track.user.username track_slug=track.slug %}">
         <p class="track-title js-audiotracks-title">
         {% if track.artist %} {{ track.artist }} &#8211; {% endif %}{{ track.title|title }}{% if track.genre %} ({{ track.genre }}){% endif %}
         </p>
