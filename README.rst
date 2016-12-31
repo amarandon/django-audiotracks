@@ -4,12 +4,6 @@ django-audiotracks
 
 A Django_ app to publish audio tracks.
 
-.. image:: https://pypip.in/v/django-audiotracks/badge.png
-        :target: https://pypi.python.org/pypi/django-audiotracks
-
-.. image:: https://pypip.in/d/django-audiotracks/badge.png
-        :target: https://pypi.python.org/pypi/django-audiotracks
-
 .. image:: https://travis-ci.org/amarandon/django-audiotracks.png?branch=master
     :target: https://travis-ci.org/amarandon/django-audiotracks
 
