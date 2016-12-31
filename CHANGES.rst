@@ -1,10 +1,11 @@
 Changes
 ~~~~~~~
 
-v0.2.4 (unreleased)
+v0.2.5 (2016-12-31)
 ___________________ 
 
 - add "js-" prefix to classes used by JavaScript code
+- upgrade to Django 1.9 and 1.10
 
 
 v0.2.4 (2014-10-14)
