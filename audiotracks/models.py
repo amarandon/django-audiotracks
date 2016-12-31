@@ -57,7 +57,7 @@ class AbstractTrack(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     audio_file = models.FileField(
-        _("Audio file"), upload_to=get_audio_upload_path)
+        _("Audio file"), upload_to=get_audio_upload_path, blank=True)
     image = ImageWithThumbsField(
         _("Image"), upload_to=get_images_upload_path, null=True,
         blank=True, sizes=((48, 48), (200, 200)))

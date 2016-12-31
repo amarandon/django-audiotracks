@@ -113,6 +113,15 @@ class TestViews(TestCase):
         self.assertEquals(track.slug,
                           "steinregen-dubsystem-ls-zongosound-outernational-f")
 
+    def test_edit_does_not_have_required_audio_file(self):
+        self.do_upload()
+        track = Track.objects.get(genre="Test Data")
+        response = self.client.get("/music/edit/%s" % track.pk)
+        self.assertContains(
+            response,
+            '<input id="id_audio_file" name="audio_file" type="file">',
+            html=True)
+
     def test_edit_track_attributes(self, ext='ogg'):
         """
         Edit track attributes and verify that they get saved into the audiofile
