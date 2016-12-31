@@ -100,7 +100,7 @@ def upload_track(request):
             for field in METADATA_FIELDS:
                 if metadata and metadata.get(field):
                     setattr(track, field, metadata.get(field)[0])
-            track.save()
+            track.save(force_insert=True)
 
             return HttpResponseRedirect(urlresolvers.reverse('edit_track',
                                                              args=[track.id]))
