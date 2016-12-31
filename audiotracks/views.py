@@ -181,6 +181,7 @@ class JavaScriptView(TemplateView):
         return super(JavaScriptView, self).render_to_response(
             context, **response_kwargs)
 
+
 player_script = JavaScriptView.as_view(template_name="audiotracks/player.js")
 
 
